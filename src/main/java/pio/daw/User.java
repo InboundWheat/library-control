@@ -19,7 +19,7 @@ public class User implements Localizable {
      * - Duplicate entries (already inside -> ignore)
      * - Exits without prior entry (not inside -> ignore)
      */
-    public void registerEvent(EventType e) {
+    public void registerNewEvent(EventType e) {
         if (e == EventType.ENTRY) {
             if (!inside) {
                 inside = true;
@@ -38,7 +38,7 @@ public class User implements Localizable {
     /**
      * Returns the number of times this user has entered.
      */
-    public int getEntryCount() {
+    public int getNEntries() {
         return entryCount;
     }
 

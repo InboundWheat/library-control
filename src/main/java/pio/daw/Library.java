@@ -62,7 +62,7 @@ public class Library implements Controlable {
     public void registerChange(String id, EventType e) {
         // Si el usuario no existe aún, lo creamos
         users.putIfAbsent(id, new User(id));
-        users.get(id).registerEvent(e);
+        users.get(id).registerNewEvent(e);
     }
 
     @Override
@@ -78,12 +78,12 @@ public class Library implements Controlable {
         if (users.isEmpty()) return Collections.emptyList();
 
         int max = users.values().stream()
-                .mapToInt(User::getEntryCount)
+                .mapToInt(User::getNEntries)
                 .max()
                 .orElse(0);
 
         return users.values().stream()
-                .filter(u -> u.getEntryCount() == max)
+                .filter(u -> u.getNEntries() == max)
                 .sorted(Comparator.comparing(User::getId))
                 .collect(Collectors.toList());
     }
@@ -91,20 +91,24 @@ public class Library implements Controlable {
     @Override
     public List<User> getUserList() {
         return users.values().stream()
-                .filter(u -> u.getEntryCount() > 0)
+                .filter(u -> u.getNEntries() > 0)
                 .sorted(Comparator.comparing(User::getId))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void printResume() {
-        System.out.println("Usuarios actualmente dentro de la biblioteca:");
-        getCurrentInside().forEach(u -> System.out.println(u.getId()));
-
-        System.out.println("\nNúmero de entradas por usuario:");
-        getUserList().forEach(u -> System.out.println(u.getId() + " -> " + u.getEntryCount()));
-
-        System.out.println("\nUsuario(s) con más entradas:");
-        getMaxEntryUsers().forEach(u -> System.out.println(u.getId()));
+        StringBuilder sb = new StringBuilder();
+ 
+        sb.append("Usuarios actualmente dentro de la biblioteca:\n");
+        getCurrentInside().forEach(u -> sb.append(u.getId()).append("\n"));
+ 
+        sb.append("\nNúmero de entradas por usuario:\n");
+        getUserList().forEach(u -> sb.append(u.getId()).append(" -> ").append(u.getNEntries()).append("\n"));
+ 
+        sb.append("\nUsuario(s) con más entradas:\n");
+        getMaxEntryUsers().forEach(u -> sb.append(u.getId()).append("\n"));
+ 
+        System.out.print(sb.toString().stripTrailing());
     }
 }

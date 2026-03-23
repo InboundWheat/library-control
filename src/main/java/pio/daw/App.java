@@ -15,22 +15,19 @@ public class App {
      */
     public static Path getPathFromArgs(String[] args) {
         if (args.length != 1) {
-            System.err.println("Uso: App <ruta_fichero>");
-            System.exit(1);
+            throw new IllegalArgumentException("Uso: App <ruta_fichero>");
         }
-
+ 
         Path path = Paths.get(args[0]);
-
+ 
         if (!Files.exists(path)) {
-            System.err.println("Error: el fichero no existe: " + path);
-            System.exit(1);
+            throw new IllegalArgumentException("Error: el fichero no existe: " + path);
         }
-
+ 
         if (!Files.isReadable(path)) {
-            System.err.println("Error: el fichero no se puede leer: " + path);
-            System.exit(1);
+            throw new IllegalArgumentException("Error: el fichero no se puede leer: " + path);
         }
-
+ 
         return path;
     }
 
